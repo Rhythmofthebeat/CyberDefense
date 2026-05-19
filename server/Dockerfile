@@ -8,8 +8,7 @@ RUN npm install --production
 
 COPY server.js ./
 
-# Copy built dashboard if present
-COPY dist/ ./dist/ 2>/dev/null || true
+COPY dist/ ./dist/
 
 # Data volume for config + fleet persistence
 VOLUME ["/app/data"]
