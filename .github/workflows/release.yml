@@ -126,24 +126,6 @@ jobs:
             rhythmbazari/cyber-defense-server:latest
             rhythmbazari/cyber-defense-server:${{ github.ref_name }}
 
-  deploy-pages:
-    runs-on: ubuntu-latest
-    needs: build-dashboard
-    permissions:
-      pages: write
-      id-token: write
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - uses: actions/download-artifact@v4
-        with: { name: dashboard-dist, path: dist/ }
-      - uses: actions/configure-pages@v4
-      - uses: actions/upload-pages-artifact@v3
-        with: { path: dist/ }
-      - id: deployment
-        uses: actions/deploy-pages@v4
-
   release:
     runs-on: ubuntu-latest
     needs: [build-agent-macos-arm64, build-agent-macos-x64, build-agent-linux, build-agent-windows]
