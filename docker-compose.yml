@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  cyber-defense-server:
+    build:
+      context: .
+      dockerfile: server/Dockerfile
+    container_name: cyber-defense-server
+    restart: unless-stopped
+    ports:
+      - "${PORT:-4001}:4001"
+    volumes:
+      - cyber-defense-data:/app/data
+      # Uncomment for TLS:
+      # - /etc/letsencrypt/live/yourdomain.com/fullchain.pem:/certs/cert.pem:ro
+      # - /etc/letsencrypt/live/yourdomain.com/privkey.pem:/certs/key.pem:ro
+    environment:
+      - PORT=4001
+      - DEVICE_TIMEOUT_MS=60000
+      - MAX_DEVICES=500
+      # Uncomment for TLS:
+      # - TLS_CERT=/certs/cert.pem
+      # - TLS_KEY=/certs/key.pem
+      # Restrict dashboard access to specific origins:
+      # - ALLOWED_ORIGINS=https://yourdomain.com
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:4001/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+volumes:
+  cyber-defense-data:
+    driver: local

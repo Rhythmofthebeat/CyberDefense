@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cyber Defense Command — Download</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #040a14;
+      color: #c8d6e5;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      min-height: 100vh;
+    }
+    header {
+      background: linear-gradient(180deg, #0a1628, #060e1a);
+      border-bottom: 1px solid #0f1d30;
+      padding: 20px 40px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    header h1 {
+      font-size: 18px;
+      letter-spacing: 3px;
+      color: #ecf0f1;
+      font-family: monospace;
+    }
+    header p { font-size: 11px; color: #4a5568; letter-spacing: 1px; }
+    .hero {
+      text-align: center;
+      padding: 60px 20px 40px;
+      border-bottom: 1px solid #0a1628;
+    }
+    .hero h2 { font-size: 28px; color: #ecf0f1; margin-bottom: 12px; }
+    .hero p  { color: #636e7b; max-width: 560px; margin: 0 auto 30px; line-height: 1.6; }
+    .badge {
+      display: inline-block;
+      padding: 5px 14px;
+      background: #0984e322;
+      border: 1px solid #0984e344;
+      border-radius: 20px;
+      color: #0984e3;
+      font-size: 12px;
+      font-family: monospace;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      max-width: 960px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+    .card {
+      background: #060e1a;
+      border: 1px solid #0f1d30;
+      border-radius: 8px;
+      padding: 24px;
+    }
+    .card-icon  { font-size: 32px; margin-bottom: 12px; }
+    .card h3    { color: #ecf0f1; font-size: 16px; margin-bottom: 6px; }
+    .card p     { color: #636e7b; font-size: 13px; line-height: 1.5; margin-bottom: 16px; }
+    .btn {
+      display: block;
+      text-align: center;
+      padding: 10px 16px;
+      border-radius: 5px;
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: filter 0.2s;
+      margin-bottom: 8px;
+      font-family: monospace;
+      letter-spacing: 0.5px;
+    }
+    .btn:hover { filter: brightness(1.15); }
+    .btn-primary { background: linear-gradient(135deg, #0984e3, #1e90ff); color: white; }
+    .btn-secondary { background: #0f1d30; color: #8395a7; border: 1px solid #1a2a3e; }
+    .section {
+      max-width: 960px;
+      margin: 0 auto 40px;
+      padding: 0 20px;
+    }
+    .section h2 {
+      font-size: 14px;
+      color: #4a5568;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #0a1628;
+    }
+    pre {
+      background: #030810;
+      border: 1px solid #0a1628;
+      border-radius: 5px;
+      padding: 16px;
+      font-size: 12px;
+      color: #00ff88;
+      overflow-x: auto;
+      line-height: 1.7;
+    }
+    .step { display: flex; gap: 14px; margin-bottom: 16px; align-items: flex-start; }
+    .step-num {
+      width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
+      background: #1e90ff22; border: 1px solid #1e90ff44;
+      color: #1e90ff; font-size: 12px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .step-body h4 { color: #c8d6e5; font-size: 14px; margin-bottom: 4px; }
+    .step-body p  { color: #636e7b; font-size: 12px; line-height: 1.5; }
+    footer {
+      text-align: center;
+      padding: 30px;
+      color: #2a3a4e;
+      font-size: 12px;
+      border-top: 1px solid #0a1628;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <span style="font-size:28px">🛡️</span>
+  <div>
+    <h1>CYBER DEFENSE COMMAND</h1>
+    <p>GOVERNMENT AI-POWERED THREAT OPERATIONS CENTER</p>
+  </div>
+</header>
+
+<div class="hero">
+  <h2>Download Cyber Defense Agent</h2>
+  <p>Install the lightweight agent on any device to monitor CPU, memory, network connections, and processes in real time from your central dashboard.</p>
+  <span class="badge">v1.0.0</span>
+</div>
+
+<div class="grid">
+  <div class="card">
+    <div class="card-icon"></div>
+    <h3>macOS</h3>
+    <p>Apple Silicon (M1/M2/M3) and Intel. Installs as a LaunchDaemon — starts automatically on boot.</p>
+    <a class="btn btn-primary" href="https://github.com/Rhythmofthebeat/cyber-defense/releases/latest/download/CyberDefenseAgent.pkg">⬇ Download .pkg (Apple Silicon)</a>
+    <a class="btn btn-secondary" href="https://github.com/Rhythmofthebeat/cyber-defense/releases/latest/download/CyberDefenseAgent-x64.pkg">⬇ Download .pkg (Intel)</a>
+  </div>
+  <div class="card">
+    <div class="card-icon">🪟</div>
+    <h3>Windows</h3>
+    <p>Windows 10/11 (64-bit). Installs as a Windows Service — starts automatically on boot.</p>
+    <a class="btn btn-primary" href="https://github.com/Rhythmofthebeat/cyber-defense/releases/latest/download/CyberDefenseAgent-Setup.exe">⬇ Download Installer (.exe)</a>
+  </div>
+  <div class="card">
+    <div class="card-icon">🐧</div>
+    <h3>Linux</h3>
+    <p>Debian/Ubuntu (.deb), RHEL/Fedora (.rpm), or raw binary. Installs as a systemd service.</p>
+    <a class="btn btn-primary" href="https://github.com/Rhythmofthebeat/cyber-defense/releases/latest/download/cyber-defense-agent_amd64.deb">⬇ Download .deb (Debian/Ubuntu)</a>
+    <a class="btn btn-secondary" href="https://github.com/Rhythmofthebeat/cyber-defense/releases/latest/download/cyber-defense-agent-linux-x64">⬇ Download Binary (all distros)</a>
+  </div>
+  <div class="card">
+    <div class="card-icon">🐳</div>
+    <h3>Server (Docker)</h3>
+    <p>Deploy the central server anywhere — your own server, AWS, GCP, Azure, or a VPS.</p>
+    <pre style="font-size:10px;margin-bottom:10px">docker run -d -p 4001:4001 \
+  -v cdc-data:/app/data \
+  rhythmbazari/cyber-defense-server:latest</pre>
+    <a class="btn btn-secondary" href="https://hub.docker.com/r/rhythmbazari/cyber-defense-server" target="_blank">View on Docker Hub ↗</a>
+  </div>
+</div>
+
+<div class="section">
+  <h2>Quick Start</h2>
+  <div class="step">
+    <div class="step-num">1</div>
+    <div class="step-body">
+      <h4>Deploy the Central Server</h4>
+      <p>Run the Docker image on any internet-accessible server. Note the API key printed on startup.</p>
+      <pre>docker run -d -p 4001:4001 -v cdc-data:/app/data rhythmbazari/cyber-defense-server:latest</pre>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num">2</div>
+    <div class="step-body">
+      <h4>Install the Agent on Each Device</h4>
+      <p>Download and run the installer for your OS, entering your server URL and API key when prompted.</p>
+      <pre># macOS/Linux one-liner:
+curl -fsSL https://cyberdefense.example.com/install.sh | sudo bash -s -- \
+  --server http://YOUR_SERVER:4001 --key YOUR_API_KEY</pre>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num">3</div>
+    <div class="step-body">
+      <h4>Open the Dashboard</h4>
+      <p>Navigate to your server URL in any browser. All connected devices appear automatically.</p>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num">4</div>
+    <div class="step-body">
+      <h4>Install the Browser Extension (Optional)</h4>
+      <p>Get a live badge showing fleet alert level in Chrome or Edge without opening the dashboard.</p>
+    </div>
+  </div>
+</div>
+
+<footer>
+  Cyber Defense Command &copy; 2025 &mdash; Built for government and enterprise security teams
+</footer>
+
+</body>
+</html>

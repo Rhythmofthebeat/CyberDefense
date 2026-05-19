@@ -1,0 +1,34 @@
+# Cyber Defense Command — Caddyfile
+# Caddy auto-provisions and renews Let's Encrypt TLS certificates.
+#
+# Replace yourdomain.com with your actual domain.
+# Run: caddy run --config Caddyfile
+#
+# To install Caddy: https://caddyserver.com/docs/install
+
+yourdomain.com {
+    reverse_proxy localhost:4001
+
+    # Security headers
+    header {
+        Strict-Transport-Security "max-age=31536000; includeSubDomains"
+        X-Content-Type-Options "nosniff"
+        X-Frame-Options "DENY"
+        Referrer-Policy "strict-origin-when-cross-origin"
+        -Server
+    }
+
+    # Compress responses
+    encode gzip
+
+    # Log access
+    log {
+        output file /var/log/caddy/cyber-defense-access.log
+        format json
+    }
+}
+
+# Redirect www to apex
+www.yourdomain.com {
+    redir https://yourdomain.com{uri} permanent
+}

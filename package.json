@@ -1,0 +1,39 @@
+{
+  "name": "cyber-defense",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "server": "cd server && node server.js",
+    "agent": "cd agent && node agent.js",
+    "build": "vite build",
+    "build:full": "vite build && cp -r dist server/",
+    "build:binary": "node scripts/build-agent-binary.mjs",
+    "build:pkg": "bash installer/macos/build-pkg.sh",
+    "build:deb": "bash installer/linux/build-deb.sh",
+    "build:all": "npm run build:full && npm run build:binary",
+    "icons": "node scripts/generate-icons.mjs",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@monaco-editor/react": "^4.7.0",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.4",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.1",
+    "canvas": "^3.0.0",
+    "esbuild": "^0.21.0",
+    "eslint": "^9.39.4",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "eslint-plugin-react-refresh": "^0.5.2",
+    "globals": "^17.4.0",
+    "postject": "^1.0.0-alpha.6",
+    "vite": "^8.0.1"
+  }
+}

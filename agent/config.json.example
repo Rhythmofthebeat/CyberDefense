@@ -1,0 +1,7 @@
+{
+  "serverUrl": "http://YOUR_SERVER_IP:4001",
+  "apiKey": "REPLACE_WITH_API_KEY_FROM_SERVER",
+  "deviceId": "auto-generated-on-first-run",
+  "deviceName": "My Device",
+  "intervalSec": 30
+}

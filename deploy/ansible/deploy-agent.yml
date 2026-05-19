@@ -1,0 +1,152 @@
+---
+# Cyber Defense Agent — Ansible Playbook
+# Deploys the agent to any number of Linux/macOS hosts simultaneously.
+#
+# Usage:
+#   ansible-playbook deploy/ansible/deploy-agent.yml \
+#     -i inventory.ini \
+#     --extra-vars "server_url=http://YOUR_SERVER:4001 api_key=YOUR_KEY"
+#
+# Inventory example (inventory.ini):
+#   [workstations]
+#   192.168.1.10
+#   192.168.1.11
+#
+#   [servers]
+#   10.0.0.5
+#   10.0.0.6
+#
+#   [all:vars]
+#   ansible_user=admin
+#   ansible_become=true
+
+- name: Deploy Cyber Defense Agent
+  hosts: all
+  become: true
+  vars:
+    server_url: "http://REPLACE_WITH_SERVER_IP:4001"
+    api_key:    "REPLACE_WITH_API_KEY"
+    install_dir: "/opt/cyber-defense-agent"
+    config_dir:  "/etc/cyber-defense"
+    agent_binary_url: "http://REPLACE_WITH_SERVER_IP:4001/download/cyber-defense-agent-linux-x64"
+    poll_interval: 30
+
+  tasks:
+    - name: Create install directory
+      file:
+        path: "{{ item }}"
+        state: directory
+        mode: '0755'
+      loop:
+        - "{{ install_dir }}"
+        - "{{ config_dir }}"
+
+    - name: Detect architecture
+      command: uname -m
+      register: arch_result
+      changed_when: false
+
+    - name: Set binary name
+      set_fact:
+        binary_name: >-
+          {{ 'cyber-defense-agent-linux-arm64'
+             if arch_result.stdout in ['aarch64', 'arm64']
+             else 'cyber-defense-agent-linux-x64' }}
+
+    - name: Download agent binary
+      get_url:
+        url: "{{ server_url }}/download/{{ binary_name }}"
+        dest: "{{ install_dir }}/cyber-defense-agent"
+        mode: '0755'
+        force: true
+      register: download_result
+      ignore_errors: true
+
+    # Fallback: copy local binary if download fails
+    - name: Copy local binary (fallback)
+      copy:
+        src: "../../dist/cyber-defense-agent-linux-x64"
+        dest: "{{ install_dir }}/cyber-defense-agent"
+        mode: '0755'
+      when: download_result is failed
+
+    - name: Generate device ID
+      shell: cat /proc/sys/kernel/random/uuid | tr -d '-' | head -c 16
+      register: device_id
+      changed_when: false
+
+    - name: Write config
+      copy:
+        dest: "{{ config_dir }}/config.json"
+        mode: '0600'
+        content: |
+          {
+            "serverUrl":   "{{ server_url }}",
+            "apiKey":      "{{ api_key }}",
+            "deviceId":    "{{ device_id.stdout }}-{{ inventory_hostname | replace('.', '-') }}",
+            "deviceName":  "{{ inventory_hostname }}",
+            "intervalSec": {{ poll_interval }}
+          }
+
+    - name: Install systemd service (Linux)
+      copy:
+        dest: /etc/systemd/system/cyber-defense-agent.service
+        content: |
+          [Unit]
+          Description=Cyber Defense Agent
+          After=network.target
+          StartLimitIntervalSec=0
+
+          [Service]
+          Type=simple
+          Restart=always
+          RestartSec=10
+          ExecStart={{ install_dir }}/cyber-defense-agent
+          Environment=CYBER_CONFIG={{ config_dir }}/config.json
+          StandardOutput=journal
+          StandardError=journal
+
+          [Install]
+          WantedBy=multi-user.target
+      when: ansible_os_family != "Darwin"
+      notify: Restart agent service
+
+    - name: Enable and start systemd service
+      systemd:
+        name: cyber-defense-agent
+        enabled: true
+        state: started
+        daemon_reload: true
+      when: ansible_os_family != "Darwin"
+
+    - name: Install LaunchDaemon (macOS)
+      copy:
+        dest: /Library/LaunchDaemons/com.cyberdefense.agent.plist
+        content: |
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+            <key>Label</key><string>com.cyberdefense.agent</string>
+            <key>ProgramArguments</key>
+            <array><string>{{ install_dir }}/cyber-defense-agent</string></array>
+            <key>EnvironmentVariables</key>
+            <dict><key>CYBER_CONFIG</key><string>{{ config_dir }}/config.json</string></dict>
+            <key>RunAtLoad</key><true/>
+            <key>KeepAlive</key><true/>
+            <key>StandardOutPath</key><string>/var/log/cyber-defense-agent.log</string>
+            <key>StandardErrorPath</key><string>/var/log/cyber-defense-agent.log</string>
+          </dict>
+          </plist>
+      when: ansible_os_family == "Darwin"
+      notify: Load macOS service
+
+  handlers:
+    - name: Restart agent service
+      systemd:
+        name: cyber-defense-agent
+        state: restarted
+        daemon_reload: true
+
+    - name: Load macOS service
+      command: launchctl load -w /Library/LaunchDaemons/com.cyberdefense.agent.plist

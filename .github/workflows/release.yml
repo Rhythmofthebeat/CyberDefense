@@ -1,0 +1,184 @@
+name: Build & Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version (e.g. 1.0.0)'
+        required: true
+
+jobs:
+  build-dashboard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '20', cache: 'npm' }
+      - run: npm ci
+      - run: npm run build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dashboard-dist
+          path: dist/
+
+  build-agent-macos-arm64:
+    runs-on: macos-latest
+    needs: build-dashboard
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '20' }
+      - run: npm ci
+      - run: cd agent && npm ci
+      - uses: actions/download-artifact@v4
+        with: { name: dashboard-dist, path: dist/ }
+      - run: node scripts/build-agent-binary.mjs
+      - run: bash installer/macos/build-pkg.sh
+      - uses: actions/upload-artifact@v4
+        with:
+          name: agent-macos-arm64
+          path: dist/CyberDefenseAgent.pkg
+
+  build-agent-macos-x64:
+    runs-on: macos-13   # Intel runner
+    needs: build-dashboard
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '20' }
+      - run: npm ci
+      - run: cd agent && npm ci
+      - uses: actions/download-artifact@v4
+        with: { name: dashboard-dist, path: dist/ }
+      - run: node scripts/build-agent-binary.mjs
+      - run: ARCH=x64 bash installer/macos/build-pkg.sh
+      - uses: actions/upload-artifact@v4
+        with:
+          name: agent-macos-x64
+          path: dist/CyberDefenseAgent-x64.pkg
+
+  build-agent-linux:
+    runs-on: ubuntu-latest
+    needs: build-dashboard
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '20' }
+      - run: npm ci
+      - run: cd agent && npm ci
+      - run: node scripts/build-agent-binary.mjs
+      - name: Build .deb
+        run: bash installer/linux/build-deb.sh
+      - name: Rename .deb to drop version
+        run: mv dist/cyber-defense-agent_*_amd64.deb dist/cyber-defense-agent_amd64.deb
+      - uses: actions/upload-artifact@v4
+        with:
+          name: agent-linux
+          path: |
+            dist/cyber-defense-agent-linux-x64
+            dist/cyber-defense-agent_amd64.deb
+
+  build-agent-windows:
+    runs-on: windows-latest
+    needs: build-dashboard
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '20' }
+      - run: npm ci
+      - run: cd agent && npm ci
+      - run: node scripts/build-agent-binary.mjs
+      - name: Build NSIS installer
+        uses: joncloud/makensis-action@v4
+        with:
+          script-file: installer/windows/installer.nsi
+      - name: Rename installer to drop version
+        run: Get-ChildItem dist/CyberDefenseAgent-*-Setup.exe | Rename-Item -NewName CyberDefenseAgent-Setup.exe
+        shell: pwsh
+      - uses: actions/upload-artifact@v4
+        with:
+          name: agent-windows
+          path: dist/CyberDefenseAgent-Setup.exe
+
+  build-server-docker:
+    runs-on: ubuntu-latest
+    needs: build-dashboard
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with: { name: dashboard-dist, path: dist/ }
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/login-action@v3
+        with:
+          username: rhythmbazari
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: server/Dockerfile
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            rhythmbazari/cyber-defense-server:latest
+            rhythmbazari/cyber-defense-server:${{ github.ref_name }}
+
+  deploy-pages:
+    runs-on: ubuntu-latest
+    needs: build-dashboard
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/download-artifact@v4
+        with: { name: dashboard-dist, path: dist/ }
+      - uses: actions/configure-pages@v4
+      - uses: actions/upload-pages-artifact@v3
+        with: { path: dist/ }
+      - id: deployment
+        uses: actions/deploy-pages@v4
+
+  release:
+    runs-on: ubuntu-latest
+    needs: [build-agent-macos-arm64, build-agent-macos-x64, build-agent-linux, build-agent-windows]
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with: { path: artifacts/ }
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          name: Cyber Defense Command ${{ github.ref_name }}
+          body: |
+            ## Cyber Defense Command ${{ github.ref_name }}
+
+            ### Agent Downloads
+            | Platform | File |
+            |---|---|
+            | macOS (Apple Silicon) | `CyberDefenseAgent.pkg` |
+            | macOS (Intel) | `CyberDefenseAgent-x64.pkg` |
+            | Windows | `CyberDefenseAgent-Setup.exe` |
+            | Linux (Debian/Ubuntu) | `cyber-defense-agent_amd64.deb` |
+            | Linux (binary) | `cyber-defense-agent-linux-x64` |
+
+            ### Server
+            ```bash
+            docker run -d -p 4001:4001 -v cdc-data:/app/data rhythmbazari/cyber-defense-server:${{ github.ref_name }}
+            ```
+
+            ### Install Agent
+            ```bash
+            # macOS — double-click the .pkg installer
+            # Windows — run CyberDefenseAgent-Setup.exe as Administrator
+            # Linux
+            sudo dpkg -i cyber-defense-agent_amd64.deb
+            ```
+          files: artifacts/**/*
+          draft: false
+          prerelease: false

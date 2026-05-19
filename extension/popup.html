@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 320px;
+      background: #040a14;
+      color: #c8d6e5;
+      font-family: 'Segoe UI', sans-serif;
+      font-size: 13px;
+    }
+    .header {
+      background: linear-gradient(180deg, #0a1628, #060e1a);
+      padding: 12px 16px;
+      border-bottom: 1px solid #0f1d30;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .header-icon { font-size: 22px; }
+    .header-title { font-size: 11px; font-weight: 700; letter-spacing: 2px; color: #ecf0f1; }
+    .header-sub   { font-size: 9px; color: #4a5568; letter-spacing: 1px; }
+    .alert-badge {
+      margin-left: auto;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+    .section { padding: 12px 16px; border-bottom: 1px solid #0a1628; }
+    .section-title { font-size: 9px; color: #4a5568; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; margin-bottom: 8px; }
+    .stat-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; font-size: 12px; }
+    .stat-label { color: #636e7b; }
+    .stat-value { font-family: 'Courier New', monospace; font-weight: 700; }
+    .dot { width: 6px; height: 6px; border-radius: 50%; display: inline-block; margin-right: 5px; }
+    .btn-open {
+      display: block; width: 100%; padding: 10px;
+      background: linear-gradient(135deg, #0984e3, #1e90ff);
+      color: white; border: none; cursor: pointer;
+      font-size: 12px; font-weight: 700; letter-spacing: 1px;
+    }
+    .btn-open:hover { filter: brightness(1.1); }
+    .settings-row { display: flex; gap: 6px; padding: 10px 16px; border-bottom: 1px solid #0a1628; }
+    .settings-input {
+      flex: 1; background: #060e1a; border: 1px solid #1e90ff33;
+      color: #c8d6e5; padding: 5px 8px; font-size: 11px; border-radius: 3px;
+      font-family: 'Courier New', monospace; outline: none;
+    }
+    .settings-btn {
+      background: #1e90ff22; border: 1px solid #1e90ff55;
+      color: #1e90ff; padding: 5px 10px; cursor: pointer;
+      font-size: 11px; border-radius: 3px; white-space: nowrap;
+    }
+    .toggle-settings { font-size: 9px; color: #4a5568; cursor: pointer; padding: 6px 16px; text-align: right; display: block; }
+    .toggle-settings:hover { color: #1e90ff; }
+    #settings-panel { display: none; }
+    .offline-msg { text-align: center; color: #636e7b; font-size: 11px; padding: 16px; }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-icon">🛡️</div>
+  <div>
+    <div class="header-title">CYBER DEFENSE</div>
+    <div class="header-sub">COMMAND CENTER</div>
+  </div>
+  <div class="alert-badge" id="alert-badge">—</div>
+</div>
+
+<div class="section" id="stats-section">
+  <div class="section-title">Fleet Status</div>
+  <div class="stat-row">
+    <span class="stat-label"><span class="dot" style="background:#2ed573"></span>Online Devices</span>
+    <span class="stat-value" id="stat-online" style="color:#2ed573">—</span>
+  </div>
+  <div class="stat-row">
+    <span class="stat-label"><span class="dot" style="background:#ff4757"></span>Offline Devices</span>
+    <span class="stat-value" id="stat-offline" style="color:#ff4757">—</span>
+  </div>
+  <div class="stat-row">
+    <span class="stat-label"><span class="dot" style="background:#0984e3"></span>Avg CPU Load</span>
+    <span class="stat-value" id="stat-cpu" style="color:#0984e3">—</span>
+  </div>
+  <div class="stat-row">
+    <span class="stat-label"><span class="dot" style="background:#ffa502"></span>High CPU Devices</span>
+    <span class="stat-value" id="stat-highcpu" style="color:#ffa502">—</span>
+  </div>
+  <div class="stat-row">
+    <span class="stat-label"><span class="dot" style="background:#6c5ce7"></span>Active Connections</span>
+    <span class="stat-value" id="stat-conns" style="color:#6c5ce7">—</span>
+  </div>
+  <div class="stat-row">
+    <span class="stat-label"><span class="dot" style="background:#ff4757"></span>Suspicious Conns</span>
+    <span class="stat-value" id="stat-suspicious" style="color:#ff4757">—</span>
+  </div>
+  <div id="last-updated" style="font-size:9px;color:#2a3a4e;margin-top:6px;text-align:right"></div>
+</div>
+
+<div id="offline-section" class="offline-msg" style="display:none">
+  Not connected to server.<br>Configure the server URL below.
+</div>
+
+<button class="btn-open" id="btn-open">OPEN DASHBOARD ↗</button>
+
+<span class="toggle-settings" id="toggle-settings">⚙ Settings</span>
+<div id="settings-panel">
+  <div class="settings-row">
+    <input class="settings-input" id="input-url" placeholder="http://server:4001" />
+    <input class="settings-input" id="input-key" placeholder="API Key" type="password" />
+    <button class="settings-btn" id="btn-save">Save</button>
+  </div>
+</div>
+
+<script src="popup.js"></script>
+</body>
+</html>

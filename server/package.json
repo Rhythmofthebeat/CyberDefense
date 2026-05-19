@@ -1,0 +1,34 @@
+{
+  "name": "cyber-defense-server",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Cyber Defense Command — Central Aggregation Server",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "bin": {
+    "cyber-defense-server": "./server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "crypto": "^1.0.1",
+    "express": "^4.18.2",
+    "ldapjs": "^3.0.7",
+    "net-snmp": "^3.26.1",
+    "openai": "^4.104.0"
+  },
+  "pkg": {
+    "assets": [
+      "data/**/*"
+    ],
+    "targets": [
+      "node20-macos-arm64",
+      "node20-macos-x64",
+      "node20-linux-x64",
+      "node20-win-x64"
+    ],
+    "outputPath": "../dist"
+  }
+}

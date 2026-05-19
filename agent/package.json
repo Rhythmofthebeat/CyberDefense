@@ -1,0 +1,13 @@
+{
+  "name": "cyber-defense-agent",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "System monitoring agent for Cyber Defense Dashboard",
+  "main": "agent.js",
+  "scripts": {
+    "start": "node agent.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
