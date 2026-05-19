@@ -94,7 +94,7 @@ jobs:
       - name: Build NSIS installer
         run: |
           choco install nsis --no-progress -y
-          makensis installer/windows/installer.nsi
+          & 'C:\Program Files (x86)\NSIS\makensis.exe' installer/windows/installer.nsi
         shell: pwsh
       - name: Rename installer to drop version
         run: Get-ChildItem dist/CyberDefenseAgent-*-Setup.exe | Rename-Item -NewName CyberDefenseAgent-Setup.exe
