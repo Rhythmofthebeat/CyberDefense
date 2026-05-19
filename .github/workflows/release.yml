@@ -144,6 +144,9 @@ jobs:
             # Linux
             sudo dpkg -i cyber-defense-agent_amd64.deb
             ```
-          files: artifacts/**/*
+          files: |
+            artifacts/agent-macos-arm64/**
+            artifacts/agent-linux/**
+            artifacts/agent-windows/**
           draft: false
           prerelease: false
