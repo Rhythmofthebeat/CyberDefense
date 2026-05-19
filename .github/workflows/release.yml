@@ -92,9 +92,10 @@ jobs:
       - run: cd agent && npm ci --legacy-peer-deps
       - run: node scripts/build-agent-binary.mjs
       - name: Build NSIS installer
-        uses: joncloud/makensis-action@v4
-        with:
-          script-file: installer/windows/installer.nsi
+        run: |
+          choco install nsis --no-progress -y
+          makensis installer/windows/installer.nsi
+        shell: pwsh
       - name: Rename installer to drop version
         run: Get-ChildItem dist/CyberDefenseAgent-*-Setup.exe | Rename-Item -NewName CyberDefenseAgent-Setup.exe
         shell: pwsh
