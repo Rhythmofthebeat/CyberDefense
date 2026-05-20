@@ -29,10 +29,10 @@ chmod 755 "${PKG_DIR}/usr/bin/cyber-defense-agent"
 # Default config (user fills in after install)
 cat > "${PKG_DIR}/etc/cyber-defense/config.json" << 'EOF'
 {
-  "serverUrl": "http://YOUR_SERVER_IP:4001",
-  "apiKey":    "REPLACE_WITH_API_KEY",
-  "deviceId":  "",
-  "deviceName": "",
+  "serverUrl": "http://3.230.151.229:4001",
+  "apiKey":    "56cb6cdfe9e41523b3368d139755c3fcb2d6a86e4d4be04af512bf8ac37117f5",
+  "deviceId":  "auto",
+  "deviceName": "auto",
   "intervalSec": 30
 }
 EOF

@@ -53,6 +53,17 @@ mkdir -p "$SCRIPTS_DIR"
 
 cat > "$SCRIPTS_DIR/postinstall" << 'EOF'
 #!/bin/bash
+mkdir -p /etc/cyber-defense
+cat > /etc/cyber-defense/config.json << 'CONFIG'
+{
+  "serverUrl": "http://3.230.151.229:4001",
+  "apiKey": "56cb6cdfe9e41523b3368d139755c3fcb2d6a86e4d4be04af512bf8ac37117f5",
+  "deviceId": "auto",
+  "deviceName": "auto",
+  "intervalSec": 30
+}
+CONFIG
+chmod 600 /etc/cyber-defense/config.json
 launchctl unload /Library/LaunchDaemons/com.cyberdefense.agent.plist 2>/dev/null || true
 launchctl load -w /Library/LaunchDaemons/com.cyberdefense.agent.plist
 echo "Cyber Defense Agent installed and started."

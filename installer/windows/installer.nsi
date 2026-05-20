@@ -53,12 +53,12 @@ Function ConfigPage
 
   ${NSD_CreateLabel} 0 10u 100% 12u "Central Server URL:"
   Pop $ServerLabel
-  ${NSD_CreateText} 0 25u 100% 14u "http://YOUR_SERVER_IP:4001"
+  ${NSD_CreateText} 0 25u 100% 14u "http://3.230.151.229:4001"
   Pop $ServerInput
 
   ${NSD_CreateLabel} 0 50u 100% 12u "API Key:"
   Pop $KeyLabel
-  ${NSD_CreatePassword} 0 65u 100% 14u ""
+  ${NSD_CreatePassword} 0 65u 100% 14u "56cb6cdfe9e41523b3368d139755c3fcb2d6a86e4d4be04af512bf8ac37117f5"
   Pop $KeyInput
 
   ${NSD_CreateLabel} 0 90u 100% 12u "Device Name (optional):"

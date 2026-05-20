@@ -48,8 +48,8 @@ function loadConfig() {
 }
 
 const config = loadConfig()
-const DEVICE_ID = config.deviceId
-const DEVICE_NAME = config.deviceName || os.hostname()
+const DEVICE_ID = (!config.deviceId || config.deviceId === 'auto') ? crypto.randomBytes(8).toString('hex') : config.deviceId
+const DEVICE_NAME = (!config.deviceName || config.deviceName === 'auto') ? os.hostname() : config.deviceName
 const SERVER_URL = config.serverUrl
 const API_KEY = config.apiKey
 const INTERVAL_MS = (config.intervalSec || 30) * 1000
