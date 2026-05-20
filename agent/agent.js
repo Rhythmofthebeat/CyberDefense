@@ -48,10 +48,22 @@ function loadConfig() {
 }
 
 const config = loadConfig()
-const DEVICE_ID = (!config.deviceId || config.deviceId === 'auto') ? crypto.randomBytes(8).toString('hex') : config.deviceId
+
+// Generate a stable device ID once and persist it back to config
+function resolveDeviceId() {
+  if (config.deviceId && config.deviceId !== 'auto') return config.deviceId
+  const newId = crypto.randomBytes(8).toString('hex')
+  try {
+    config.deviceId = newId
+    fs.writeFileSync(CONFIG_PATH, JSON.stringify(config, null, 2))
+  } catch {}
+  return newId
+}
+
+const DEVICE_ID   = resolveDeviceId()
 const DEVICE_NAME = (!config.deviceName || config.deviceName === 'auto') ? os.hostname() : config.deviceName
-const SERVER_URL = config.serverUrl
-const API_KEY = config.apiKey
+const SERVER_URL  = config.serverUrl
+const API_KEY     = config.apiKey
 const INTERVAL_MS = (config.intervalSec || 30) * 1000
 
 // ── CPU ────────────────────────────────────────────────────────────────────────
