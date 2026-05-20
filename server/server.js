@@ -12,6 +12,7 @@ import { fileURLToPath } from 'url'
 import { createServer as createHttpServer } from 'http'
 import { createServer as createHttpsServer } from 'https'
 import { pollSnmpDevice, pollPingDevice } from './poller.js'
+import { pollAllMDM } from './mdm-poller.js'
 import ldap from 'ldapjs'
 import OpenAI from 'openai'
 
@@ -232,6 +233,28 @@ if (fs.existsSync(USERS_FILE)) {
   try { users = JSON.parse(fs.readFileSync(USERS_FILE, 'utf8')) } catch {}
 }
 function saveUsers() { fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2)) }
+
+// ── MDM store ──────────────────────────────────────────────────────────────────
+const MDM_FILE    = path.join(DATA_DIR, 'mdm-settings.json')
+const MDM_DEV_FILE= path.join(DATA_DIR, 'mdm-devices.json')
+let mdmSettings   = { jamf: { enabled: false }, intune: { enabled: false } }
+let mdmDevices    = []
+if (fs.existsSync(MDM_FILE))     try { mdmSettings = JSON.parse(fs.readFileSync(MDM_FILE, 'utf8')) } catch {}
+if (fs.existsSync(MDM_DEV_FILE)) try { mdmDevices  = JSON.parse(fs.readFileSync(MDM_DEV_FILE, 'utf8')) } catch {}
+function saveMDMSettings() { fs.writeFileSync(MDM_FILE,     JSON.stringify(mdmSettings, null, 2)) }
+function saveMDMDevices()  { fs.writeFileSync(MDM_DEV_FILE, JSON.stringify(mdmDevices,  null, 2)) }
+
+async function syncMDM() {
+  if (!mdmSettings.jamf?.enabled && !mdmSettings.intune?.enabled) return
+  try {
+    const { devices, errors } = await pollAllMDM(mdmSettings)
+    if (errors.length) errors.forEach(e => console.warn(`  [MDM] ${e.source}: ${e.error}`))
+    mdmDevices = devices
+    saveMDMDevices()
+  } catch (e) { console.warn('  [MDM] sync error:', e.message) }
+}
+syncMDM()
+setInterval(syncMDM, 5 * 60 * 1000) // every 5 minutes
 function auditLog(action, actor, target, meta = {}) {
   const entry = JSON.stringify({ ts: new Date().toISOString(), action, actor, target, ...meta }) + '\n'
   fs.appendFileSync(AUDIT_FILE, entry)
@@ -821,6 +844,48 @@ app.get('/download/intune-install.ps1', (req, res) => {
   res.setHeader('Content-Type', 'text/plain')
   res.setHeader('Content-Disposition', 'attachment; filename="Install-CyberDefenseAgent.ps1"')
   res.send(content)
+})
+
+// ── MDM endpoints ─────────────────────────────────────────────────────────────
+app.get('/api/mdm/devices', requireAuth, (req, res) => {
+  res.json(mdmDevices)
+})
+
+app.get('/api/mdm/settings', requireAuth, requireAdmin, (req, res) => {
+  // Strip passwords before sending
+  const safe = JSON.parse(JSON.stringify(mdmSettings))
+  if (safe.jamf?.password)      safe.jamf.password      = '••••••••'
+  if (safe.intune?.clientSecret) safe.intune.clientSecret = '••••••••'
+  res.json(safe)
+})
+
+app.post('/api/mdm/settings', requireAuth, requireAdmin, (req, res) => {
+  const { jamf, intune } = req.body || {}
+  if (jamf) {
+    mdmSettings.jamf = {
+      enabled:  !!jamf.enabled,
+      url:      jamf.url?.replace(/\/$/, '') || '',
+      username: jamf.username || '',
+      password: jamf.password && jamf.password !== '••••••••' ? jamf.password : (mdmSettings.jamf?.password || ''),
+    }
+  }
+  if (intune) {
+    mdmSettings.intune = {
+      enabled:      !!intune.enabled,
+      tenantId:     intune.tenantId || '',
+      clientId:     intune.clientId || '',
+      clientSecret: intune.clientSecret && intune.clientSecret !== '••••••••' ? intune.clientSecret : (mdmSettings.intune?.clientSecret || ''),
+    }
+  }
+  saveMDMSettings()
+  auditLog('mdm_settings_updated', req.user.username, 'mdm')
+  syncMDM()
+  res.json({ ok: true })
+})
+
+app.post('/api/mdm/sync', requireAuth, requireAdmin, async (req, res) => {
+  await syncMDM()
+  res.json({ ok: true, count: mdmDevices.length })
 })
 
 // Agent binaries (served from dist/)

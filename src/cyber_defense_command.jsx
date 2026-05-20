@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import Editor from "@monaco-editor/react";
+import MDMDevices from "./MDMDevices.jsx";
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -1112,6 +1113,13 @@ export default function CyberDefenseCommand({ token, onLogout }) {
         </div>
       )}
 
+      {/* ── MDM Devices page ────────────────────────────────────── */}
+      {mainTab === "mdm" && (
+        <div style={{ flex:1, minHeight:0, display:"flex", flexDirection:"column" }}>
+          <MDMDevices token={token} />
+        </div>
+      )}
+
       {/* ── LEFT: Dashboard ─────────────────────────────────────── */}
       {mainTab === "dashboard" && <div style={{ flex:1, minWidth:0, overflowY:"auto", position:"relative" }}>
         <ScanLine/>
@@ -1147,7 +1155,7 @@ export default function CyberDefenseCommand({ token, onLogout }) {
             <div style={{ width:1, height:30, background:"#0f1d30" }}/>
             {/* Main nav tabs */}
             <div style={{ display:"flex", background:"#060e1a", border:"1px solid #0f1d30", borderRadius:4, overflow:"hidden" }}>
-              {[["dashboard","🖥 Dashboard"],["editor","⌨️ Code Editor"]].map(([id, label]) => (
+              {[["dashboard","🖥 Dashboard"],["mdm","📱 MDM Devices"],["editor","⌨️ Code Editor"]].map(([id, label]) => (
                 <button key={id} onClick={() => setMainTab(id)} style={{ padding:"6px 14px", background: mainTab===id ? "#0984e322" : "transparent", border:"none", borderRight:"1px solid #0f1d30", color: mainTab===id ? "#0984e3" : "#4a5568", cursor:"pointer", fontSize:11, fontWeight:700, fontFamily:"'JetBrains Mono',monospace", letterSpacing:0.5, whiteSpace:"nowrap" }}>
                   {label}
                 </button>
