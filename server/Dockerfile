@@ -6,8 +6,7 @@ WORKDIR /app
 COPY server/package.json ./
 RUN npm install --production
 
-COPY server/server.js ./
-COPY server/poller.js ./
+COPY server/*.js ./
 
 COPY dist/ ./dist/
 
