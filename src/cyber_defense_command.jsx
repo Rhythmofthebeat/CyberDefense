@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import Editor from "@monaco-editor/react";
 import MDMDevices from "./MDMDevices.jsx";
+import FleetView from "./FleetView.jsx";
+import AutonomousAgentPanel from "./AutonomousAgent.jsx";
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -1113,6 +1115,20 @@ export default function CyberDefenseCommand({ token, onLogout }) {
         </div>
       )}
 
+      {/* ── Autonomous Agent page ───────────────────────────────── */}
+      {mainTab === "autonomous" && (
+        <div style={{ flex:1, minHeight:0, display:"flex", flexDirection:"column" }}>
+          <AutonomousAgentPanel token={token} />
+        </div>
+      )}
+
+      {/* ── Fleet page ──────────────────────────────────────────── */}
+      {mainTab === "fleet" && (
+        <div style={{ flex:1, minHeight:0, display:"flex", flexDirection:"column" }}>
+          <FleetView token={token} threats={threats} />
+        </div>
+      )}
+
       {/* ── MDM Devices page ────────────────────────────────────── */}
       {mainTab === "mdm" && (
         <div style={{ flex:1, minHeight:0, display:"flex", flexDirection:"column" }}>
@@ -1155,7 +1171,7 @@ export default function CyberDefenseCommand({ token, onLogout }) {
             <div style={{ width:1, height:30, background:"#0f1d30" }}/>
             {/* Main nav tabs */}
             <div style={{ display:"flex", background:"#060e1a", border:"1px solid #0f1d30", borderRadius:4, overflow:"hidden" }}>
-              {[["dashboard","🖥 Dashboard"],["mdm","📱 MDM Devices"],["editor","⌨️ Code Editor"]].map(([id, label]) => (
+              {[["dashboard","🖥 Dashboard"],["fleet","🖧 Fleet"],["autonomous","🤖 Auto Agent"],["mdm","📱 MDM"],["editor","⌨️ Code"]].map(([id, label]) => (
                 <button key={id} onClick={() => setMainTab(id)} style={{ padding:"6px 14px", background: mainTab===id ? "#0984e322" : "transparent", border:"none", borderRight:"1px solid #0f1d30", color: mainTab===id ? "#0984e3" : "#4a5568", cursor:"pointer", fontSize:11, fontWeight:700, fontFamily:"'JetBrains Mono',monospace", letterSpacing:0.5, whiteSpace:"nowrap" }}>
                   {label}
                 </button>

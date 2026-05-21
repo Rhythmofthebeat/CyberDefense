@@ -13,6 +13,7 @@ import { createServer as createHttpServer } from 'http'
 import { createServer as createHttpsServer } from 'https'
 import { pollSnmpDevice, pollPingDevice } from './poller.js'
 import { pollAllMDM } from './mdm-poller.js'
+import { AutonomousAgent } from './autonomous-agent.js'
 import ldap from 'ldapjs'
 import OpenAI from 'openai'
 
@@ -291,6 +292,18 @@ if (fs.existsSync(FLEET_FILE)) {
 }
 function saveFleet() { fs.writeFileSync(FLEET_FILE, JSON.stringify(fleet, null, 2)) }
 setInterval(saveFleet, 10_000)
+
+// ── Autonomous agent ───────────────────────────────────────────────────────────
+const autonomousAgent = new AutonomousAgent({
+  fleet,
+  execJob: async (deviceId, cmd, lang) => {
+    const jobId = crypto.randomBytes(6).toString('hex')
+    execJobs?.set(jobId, { id: jobId, deviceId, cmd, language: lang, status: 'pending', createdAt: Date.now() })
+    return jobId
+  },
+  auditLog,
+  addAlert: (msg) => console.log(`  [ALERT] ${msg}`),
+})
 
 // ── Network devices store (SNMP + ping) ───────────────────────────────────────
 const NET_DEVICES_FILE = path.join(DATA_DIR, 'network-devices.json')
@@ -686,6 +699,13 @@ app.post('/api/heartbeat', rateLimit(60_000, 10), async (req, res) => {
     online: true,
     beaconing: beaconing.length ? beaconing : undefined,
   }
+
+  // Fire autonomous agent (non-blocking)
+  if (beaconing.length) {
+    const threats = beaconing.map(b => ({ type: { id: 'apt', label: 'APT/Beaconing' }, severity: 'HIGH', conn: { ip: b.ip } }))
+    autonomousAgent.onThreats(deviceId, threats).catch(() => {})
+  }
+
   res.json({ ok: true })
 })
 
@@ -844,6 +864,26 @@ app.get('/download/intune-install.ps1', (req, res) => {
   res.setHeader('Content-Type', 'text/plain')
   res.setHeader('Content-Disposition', 'attachment; filename="Install-CyberDefenseAgent.ps1"')
   res.send(content)
+})
+
+// ── Autonomous agent endpoints ────────────────────────────────────────────────
+app.get('/api/autonomous/status', requireAuth, (req, res) => {
+  res.json({ enabled: autonomousAgent.enabled, rules: autonomousAgent.getRules() })
+})
+
+app.post('/api/autonomous/toggle', requireAuth, requireAdmin, (req, res) => {
+  autonomousAgent.setEnabled(!autonomousAgent.enabled)
+  auditLog('AUTONOMOUS_TOGGLED', req.user.username, 'system', { enabled: autonomousAgent.enabled })
+  res.json({ enabled: autonomousAgent.enabled })
+})
+
+app.post('/api/autonomous/rules', requireAuth, requireAdmin, (req, res) => {
+  autonomousAgent.setRules(req.body.rules)
+  res.json({ ok: true })
+})
+
+app.get('/api/autonomous/log', requireAuth, (req, res) => {
+  res.json(autonomousAgent.getLog())
 })
 
 // ── MDM endpoints ─────────────────────────────────────────────────────────────
