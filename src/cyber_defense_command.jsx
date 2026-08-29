@@ -403,7 +403,7 @@ async function streamCompletion({ token, messages, onDelta, onDone, onError }) {
 function AIChat({ selectedThreat, token, addLog }) {
   const [messages, setMessages] = useState([{
     role: "assistant",
-    content: "I'm your AI cybersecurity analyst (powered by ChatGPT). Select a threat and ask me to analyze it, or ask about incident response, threat actors, firewall rules, CVEs, or mitigation strategies.",
+    content: "AI chat isn't available on this public demo — it talks to a private OpenAI-backed API that isn't exposed on this hosted build.",
   }]);
   const [input,   setInput]   = useState("");
   const [loading, setLoading] = useState(false);
@@ -466,11 +466,11 @@ function AIChat({ selectedThreat, token, addLog }) {
           value={input}
           onChange={e => setInput(e.target.value)}
           onKeyDown={e => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(); } }}
-          placeholder={selectedThreat ? `Ask about ${selectedThreat.id}…` : "Ask about threats, tactics, mitigations…"}
+          disabled placeholder="AI chat isn't available in this public demo"
           rows={2}
           style={{ flex: 1, padding: "8px 12px", background: "#060e1a", border: "1px solid #0f1d30", borderRadius: 4, color: "#c8d6e5", fontSize: 12, fontFamily: "'JetBrains Mono',monospace", outline: "none", resize: "none", lineHeight: 1.5 }}
         />
-        <button onClick={send} disabled={loading || !input.trim()} style={{ padding: "8px 14px", background: loading ? "#0a1628" : "#0984e31a", border: "1px solid #0984e344", borderRadius: 4, color: loading ? "#4a5568" : "#0984e3", cursor: loading ? "not-allowed" : "pointer", fontSize: 12, fontWeight: 700, alignSelf: "stretch" }}>
+        <button onClick={send} disabled={true} style={{ padding: "8px 14px", background: loading ? "#0a1628" : "#0984e31a", border: "1px solid #0984e344", borderRadius: 4, color: loading ? "#4a5568" : "#0984e3", cursor: loading ? "not-allowed" : "pointer", fontSize: 12, fontWeight: 700, alignSelf: "stretch" }}>
           {loading ? "…" : "↑"}
         </button>
       </div>
@@ -1221,7 +1221,7 @@ export default function CyberDefenseCommand({ token, onLogout }) {
                 <div style={{ display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", height:200, gap:8, textAlign:"center" }}>
                   <div style={{ fontSize:28, opacity:0.3 }}>📡</div>
                   <div style={{ fontSize:11, color:"#ff4757", fontFamily:"'JetBrains Mono',monospace", fontWeight:700 }}>NOT CONNECTED</div>
-                  <div style={{ fontSize:10, color:"#2a3a4e", maxWidth:200 }}>Run <span style={{ color:"#0984e3" }}>npm run agent</span> to connect this device</div>
+                  <div style={{ fontSize:10, color:"#2a3a4e", maxWidth:200 }}>Live device monitoring isn't available in this public demo</div>
                 </div>
               )
             }
