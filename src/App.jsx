@@ -1,5 +1,4 @@
-import { useState, useEffect, Component } from 'react'
-import Login from './Login'
+import { Component } from 'react'
 import CyberDefenseCommand from './cyber_defense_command'
 
 class ErrorBoundary extends Component {
@@ -12,9 +11,9 @@ class ErrorBoundary extends Component {
           <div style={{ fontSize: 16, marginBottom: 12 }}>⚠ Dashboard render error — please report this:</div>
           <div style={{ color: '#fdcb6e' }}>{this.state.error?.toString()}</div>
           <div style={{ color: '#636e7b', marginTop: 12, fontSize: 11 }}>{this.state.error?.stack}</div>
-          <button onClick={() => { localStorage.removeItem('cdc-token'); window.location.reload(); }}
+          <button onClick={() => { window.location.reload(); }}
             style={{ marginTop: 20, padding: '8px 16px', background: '#ff475722', border: '1px solid #ff4757', color: '#ff4757', cursor: 'pointer', borderRadius: 4, fontFamily: 'monospace' }}>
-            Sign out & reload
+            Reload
           </button>
         </div>
       );
@@ -23,33 +22,12 @@ class ErrorBoundary extends Component {
   }
 }
 
+// Login flow removed — this deployment is a public, no-account demo.
+// The dashboard already degrades gracefully when the backend API is unreachable.
 export default function App() {
-  const [token, setToken] = useState(() => localStorage.getItem('cdc-token'))
-  const [checking, setChecking] = useState(true)
-
-  // Verify token is still valid on load
-  useEffect(() => {
-    if (!token) { setChecking(false); return }
-    fetch('/api/fleet', { headers: { Authorization: `Bearer ${token}` } })
-      .then(r => { if (!r.ok) throw new Error(); setChecking(false) })
-      .catch(() => { localStorage.removeItem('cdc-token'); setToken(null); setChecking(false) })
-  }, [])
-
-  const handleLogin = (t) => setToken(t)
-
-  const handleLogout = () => {
-    localStorage.removeItem('cdc-token')
-    localStorage.removeItem('cdc-user')
-    setToken(null)
-  }
-
-  if (checking) return null
-
-  if (!token) return <Login onLogin={handleLogin} />
-
   return (
     <ErrorBoundary>
-      <CyberDefenseCommand token={token} onLogout={handleLogout} />
+      <CyberDefenseCommand token={null} onLogout={() => {}} />
     </ErrorBoundary>
   )
 }
