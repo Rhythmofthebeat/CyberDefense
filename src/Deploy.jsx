@@ -17,7 +17,7 @@ const PLATFORMS = [
   },
   {
     id: "linux",
-    icon: "🐧",
+    icon: "LNX",
     label: "Linux",
     sub: "Ubuntu · Debian · RHEL · Fedora",
     color: "#fdcb6e",
@@ -29,7 +29,7 @@ const PLATFORMS = [
   },
   {
     id: "windows",
-    icon: "🪟",
+    icon: "WIN",
     label: "Windows",
     sub: "Windows 10 / 11 (64-bit)",
     color: "#74b9ff",
@@ -41,7 +41,7 @@ const PLATFORMS = [
   },
   {
     id: "ansible",
-    icon: "⚙️",
+    icon: "ANS",
     label: "Ansible",
     sub: "Deploy to hundreds of machines at once",
     color: "#e17055",
@@ -53,7 +53,7 @@ const PLATFORMS = [
   },
   {
     id: "jamf",
-    icon: "🍎",
+    icon: "MAC",
     label: "Jamf Pro",
     sub: "Mass deploy to managed Macs",
     color: "#a29bfe",
@@ -66,7 +66,7 @@ const PLATFORMS = [
   },
   {
     id: "intune",
-    icon: "🏢",
+    icon: "MDM",
     label: "Microsoft Intune",
     sub: "Mass deploy to managed Windows devices",
     color: "#00b894",
@@ -199,7 +199,7 @@ export default function Deploy({ token, onClose }) {
                 </div>
               </div>
               <div style={{ fontSize: 10, color: "#4a5568", marginTop: 8 }}>
-                💡 All downloaded scripts have your server URL and API key pre-filled automatically.
+                All downloaded scripts have your server URL and API key pre-filled automatically.
               </div>
             </div>
 
@@ -238,7 +238,7 @@ export default function Deploy({ token, onClose }) {
                         color: platform.color, textDecoration: "none",
                         fontSize: 11, fontFamily: "monospace", fontWeight: 700,
                       }}>
-                        ⬇ {step.file}
+                        {step.file}
                       </a>
                     )}
                     {step.type === "info" && (
@@ -256,7 +256,7 @@ export default function Deploy({ token, onClose }) {
               background: "#040a14", border: "1px solid #0f1d30", borderRadius: 5,
               padding: "10px 14px", fontSize: 11, color: "#636e7b",
             }}>
-              ℹ {platform.note}
+              {platform.note}
             </div>
           </div>
         </div>
