@@ -48,7 +48,7 @@ export default function Login({ onLogin }) {
           padding: "28px 32px",
           textAlign: "center",
         }}>
-          <div style={{ fontSize: 40, marginBottom: 12 }}>🛡️</div>
+          <div style={{ fontSize: 40, marginBottom: 12 }}></div>
           <div style={{
             fontFamily: "monospace", fontSize: 13, fontWeight: 900,
             letterSpacing: 3, color: "#ecf0f1", marginBottom: 4,
@@ -109,7 +109,7 @@ export default function Login({ onLogin }) {
               borderRadius: 5, padding: "10px 12px", marginBottom: 16,
               color: "#ff4757", fontSize: 12, fontFamily: "monospace",
             }}>
-              ⚠ {error}
+              {error}
             </div>
           )}
 
