@@ -146,9 +146,9 @@ export default function UserManagement({ token, onClose }) {
         {/* Tabs */}
         <div style={{ display: "flex", borderBottom: "1px solid #0f1d30", background: "#040a14" }}>
           {[
-            { id: "users", label: `👥 Users (${users.length})` },
-            { id: "audit", label: "📋 Audit Log" },
-            { id: "ldap",  label: "🏢 Active Directory" },
+            { id: "users", label: `Users (${users.length})` },
+            { id: "audit", label: "Audit Log" },
+            { id: "ldap",  label: "Active Directory" },
           ].map(t => (
             <button key={t.id} onClick={() => setTab(t.id)} style={{
               padding: "10px 20px", background: "transparent",
@@ -268,7 +268,7 @@ export default function UserManagement({ token, onClose }) {
                   </div>
                   {error && (
                     <div style={{ background: "#ff475718", border: "1px solid #ff475733", borderRadius: 4, padding: "8px 12px", marginBottom: 10, color: "#ff4757", fontSize: 12 }}>
-                      ⚠ {error}
+                      {error}
                     </div>
                   )}
                   <div style={{ display: "flex", gap: 8 }}>
@@ -412,7 +412,7 @@ export default function UserManagement({ token, onClose }) {
                   background: "#0984e318", border: "1px solid #0984e344", color: "#0984e3",
                   fontFamily: "monospace", fontWeight: 700, fontSize: 12, letterSpacing: 1,
                 }}>
-                  {ldapTesting ? "TESTING..." : "🔌 TEST CONNECTION"}
+                  {ldapTesting ? "TESTING..." : "TEST CONNECTION"}
                 </button>
                 <button onClick={saveLdap} disabled={ldapSaving} style={{
                   flex: 1, padding: "10px", borderRadius: 5, cursor: ldapSaving ? "not-allowed" : "pointer",
