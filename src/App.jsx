@@ -8,7 +8,7 @@ class ErrorBoundary extends Component {
     if (this.state.error) {
       return (
         <div style={{ color: '#ff4757', padding: 30, fontFamily: 'monospace', background: '#040a14', minHeight: '100vh', whiteSpace: 'pre-wrap' }}>
-          <div style={{ fontSize: 16, marginBottom: 12 }}>⚠ Dashboard render error — please report this:</div>
+          <div style={{ fontSize: 16, marginBottom: 12 }}>Dashboard render error — please report this:</div>
           <div style={{ color: '#fdcb6e' }}>{this.state.error?.toString()}</div>
           <div style={{ color: '#636e7b', marginTop: 12, fontSize: 11 }}>{this.state.error?.stack}</div>
           <button onClick={() => { window.location.reload(); }}
