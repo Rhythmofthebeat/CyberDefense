@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 
-const PLATFORM_ICON = { darwin: '🍎', win32: '🪟', linux: '🐧' }
+const PLATFORM_ICON = { darwin: 'MAC', win32: 'WIN', linux: 'LNX' }
 const PLATFORM_NAME = { darwin: 'macOS', win32: 'Windows', linux: 'Linux' }
 
 function UsageBar({ value, color }) {
@@ -26,7 +26,7 @@ function DeviceCard({ device, selected, onClick }) {
       transition: 'all 0.15s',
     }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
-        <span style={{ fontSize: 16 }}>{PLATFORM_ICON[platform] || '💻'}</span>
+        <span style={{ fontSize: 16 }}>{PLATFORM_ICON[platform] || 'PC'}</span>
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ color: '#ecf0f1', fontSize: 12, fontWeight: 700, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{device.name}</div>
           <div style={{ color: '#4a5568', fontSize: 10 }}>{PLATFORM_NAME[platform] || platform}</div>
@@ -60,7 +60,7 @@ function DeviceDetail({ device, threats, token }) {
   const [tab, setTab] = useState('overview')
   if (!device) return (
     <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#2a3a4e', flexDirection: 'column', gap: 10 }}>
-      <div style={{ fontSize: 32 }}>💻</div>
+      <div style={{ fontSize: 32 }}></div>
       <div style={{ fontSize: 13 }}>Select a device</div>
     </div>
   )
@@ -79,7 +79,7 @@ function DeviceDetail({ device, threats, token }) {
     <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
       {/* Device header */}
       <div style={{ padding: '14px 20px', borderBottom: '1px solid #0f1d30', background: '#060e1a', display: 'flex', alignItems: 'center', gap: 12 }}>
-        <span style={{ fontSize: 28 }}>{PLATFORM_ICON[platform] || '💻'}</span>
+        <span style={{ fontSize: 28 }}>{PLATFORM_ICON[platform] || 'PC'}</span>
         <div style={{ flex: 1 }}>
           <div style={{ color: '#ecf0f1', fontSize: 16, fontWeight: 700 }}>{device.name}</div>
           <div style={{ color: '#4a5568', fontSize: 11 }}>
