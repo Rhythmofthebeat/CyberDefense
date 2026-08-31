@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 
 const ACTION_COLOR = { kill_process: '#ff4757', block_ip: '#ff6348', isolate_device: '#e84393', alert: '#ffa502' }
-const ACTION_ICON  = { kill_process: '⚡', block_ip: '🚫', isolate_device: '🔒', alert: '🔔' }
+const ACTION_ICON  = { kill_process: 'KILL', block_ip: 'BLOCK', isolate_device: 'ISO', alert: 'ALERT' }
 const SEV_COLOR    = { CRITICAL: '#ff4757', HIGH: '#ff6348', MEDIUM: '#ffa502', LOW: '#2ed573' }
 
 export default function AutonomousAgentPanel({ token }) {
@@ -60,7 +60,7 @@ export default function AutonomousAgentPanel({ token }) {
       {/* Warning banner when enabled */}
       {status.enabled && (
         <div style={{ background: '#ff475711', border: '1px solid #ff475733', borderRadius: 5, padding: '10px 14px', display: 'flex', alignItems: 'center', gap: 10 }}>
-          <span style={{ fontSize: 18 }}>⚡</span>
+          <span style={{ fontSize: 18 }}></span>
           <span style={{ color: '#ff6348', fontSize: 12 }}>Autonomous mode is <strong>active</strong> — the agent will automatically execute actions on connected devices when threats are detected.</span>
         </div>
       )}
@@ -82,7 +82,7 @@ export default function AutonomousAgentPanel({ token }) {
         <div style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 8 }}>
           {(status.rules || []).map(rule => (
             <div key={rule.id} style={{ background: '#060e1a', border: `1px solid ${rule.enabled ? '#0f1d3088' : '#0f1d30'}`, borderRadius: 6, padding: '12px 16px', display: 'flex', alignItems: 'center', gap: 14, opacity: rule.enabled ? 1 : 0.5 }}>
-              <div style={{ fontSize: 24 }}>{ACTION_ICON[rule.action] || '🤖'}</div>
+              <div style={{ fontSize: 24 }}>{ACTION_ICON[rule.action] || 'BOT'}</div>
               <div style={{ flex: 1 }}>
                 <div style={{ color: '#ecf0f1', fontSize: 13, fontWeight: 600 }}>{rule.description}</div>
                 <div style={{ color: '#4a5568', fontSize: 10, marginTop: 3, fontFamily: 'monospace' }}>
@@ -111,7 +111,7 @@ export default function AutonomousAgentPanel({ token }) {
               <div key={i} style={{ background: '#060e1a', border: `1px solid ${entry.status === 'failed' ? '#ff475722' : '#0f1d30'}`, borderRadius: 5, padding: '10px 14px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                    <span style={{ fontSize: 16 }}>{ACTION_ICON[entry.action] || '🤖'}</span>
+                    <span style={{ fontSize: 16 }}>{ACTION_ICON[entry.action] || 'BOT'}</span>
                     <span style={{ color: ACTION_COLOR[entry.action] || '#c8d6e5', fontSize: 12, fontWeight: 700, fontFamily: 'monospace' }}>{entry.action}</span>
                     <span style={{ color: SEV_COLOR[entry.severity] || '#ffa502', fontSize: 10, fontFamily: 'monospace' }}>{entry.severity}</span>
                   </div>
