@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 
-const PLATFORM_ICON = { mobile: '📱', computer: '💻', tablet: '📟' }
+const PLATFORM_ICON = { mobile: 'MOB', computer: 'PC', tablet: 'TAB' }
 const SOURCE_COLOR  = { jamf: '#0984e3', intune: '#7B68EE' }
 
 function MDMSettingsPanel({ token, onClose }) {
@@ -145,7 +145,7 @@ export default function MDMDevices({ token }) {
       {/* Device grid */}
       {filtered.length === 0 ? (
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 12, color: '#2a3a4e' }}>
-          <div style={{ fontSize: 40 }}>📱</div>
+          <div style={{ fontSize: 40 }}></div>
           <div style={{ fontSize: 13 }}>No MDM devices yet</div>
           <button onClick={() => setShowSettings(true)} style={{ background: '#0984e322', border: '1px solid #0984e344', color: '#0984e3', borderRadius: 5, padding: '8px 18px', cursor: 'pointer', fontSize: 12, fontFamily: 'monospace' }}>
             Configure Jamf / Intune
@@ -156,7 +156,7 @@ export default function MDMDevices({ token }) {
           {filtered.map(d => (
             <div key={d.id} style={{ background: '#060e1a', border: '1px solid #0f1d30', borderRadius: 6, padding: 14 }}>
               <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
-                <div style={{ fontSize: 26 }}>{PLATFORM_ICON[d.type] || '📱'}</div>
+                <div style={{ fontSize: 26 }}>{PLATFORM_ICON[d.type] || 'MOB'}</div>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ color: '#ecf0f1', fontSize: 13, fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{d.name}</div>
                   <div style={{ color: '#636e7b', fontSize: 11, marginTop: 2 }}>{d.model}</div>
@@ -166,8 +166,8 @@ export default function MDMDevices({ token }) {
                   {d.source}
                 </div>
               </div>
-              {d.username && <div style={{ color: '#636e7b', fontSize: 10, marginTop: 8 }}>👤 {d.username}</div>}
-              {d.lastSeen  && <div style={{ color: '#4a5568',  fontSize: 10, marginTop: 3 }}>🕐 {new Date(d.lastSeen).toLocaleDateString()}</div>}
+              {d.username && <div style={{ color: '#636e7b', fontSize: 10, marginTop: 8 }}>{d.username}</div>}
+              {d.lastSeen  && <div style={{ color: '#4a5568',  fontSize: 10, marginTop: 3 }}>{new Date(d.lastSeen).toLocaleDateString()}</div>}
               {'compliant' in d && (
                 <div style={{ marginTop: 8, display: 'inline-block', background: d.compliant ? '#2ed57322' : '#ff475722', border: `1px solid ${d.compliant ? '#2ed57344' : '#ff475744'}`, color: d.compliant ? '#2ed573' : '#ff4757', borderRadius: 3, padding: '2px 8px', fontSize: 9, fontFamily: 'monospace' }}>
                   {d.compliant ? '✓ COMPLIANT' : '✗ NON-COMPLIANT'}
