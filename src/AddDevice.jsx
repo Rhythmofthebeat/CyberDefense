@@ -1,21 +1,21 @@
 import { useState } from "react";
 
 const DEVICE_TYPES = [
-  { value: "router",    label: "🌐 Router",        modes: ["ping", "snmp"] },
-  { value: "switch",    label: "🔀 Switch",         modes: ["ping", "snmp"] },
-  { value: "firewall",  label: "🔥 Firewall",       modes: ["ping", "snmp"] },
-  { value: "ap",        label: "📡 Access Point",   modes: ["ping", "snmp"] },
-  { value: "server",    label: "🖥️ Server",         modes: ["ping", "snmp"] },
-  { value: "printer",   label: "🖨️ Printer",        modes: ["ping"] },
-  { value: "camera",    label: "📷 IP Camera",      modes: ["ping"] },
-  { value: "iot",       label: "💡 IoT Device",     modes: ["ping"] },
-  { value: "nas",       label: "💾 NAS",            modes: ["ping", "snmp"] },
-  { value: "unknown",   label: "❓ Other Device",   modes: ["ping", "snmp"] },
+  { value: "router",    label: "RTR Router",        modes: ["ping", "snmp"] },
+  { value: "switch",    label: "SW Switch",         modes: ["ping", "snmp"] },
+  { value: "firewall",  label: "FW Firewall",       modes: ["ping", "snmp"] },
+  { value: "ap",        label: "AP Access Point",   modes: ["ping", "snmp"] },
+  { value: "server",    label: "SRV Server",         modes: ["ping", "snmp"] },
+  { value: "printer",   label: "PRN Printer",        modes: ["ping"] },
+  { value: "camera",    label: "CAM IP Camera",      modes: ["ping"] },
+  { value: "iot",       label: "IOT IoT Device",     modes: ["ping"] },
+  { value: "nas",       label: "NAS NAS",            modes: ["ping", "snmp"] },
+  { value: "unknown",   label: "? Other Device",   modes: ["ping", "snmp"] },
 ];
 
 const TYPE_ICONS = {
-  router: "🌐", switch: "🔀", firewall: "🔥", ap: "📡", server: "🖥️",
-  printer: "🖨️", camera: "📷", iot: "💡", nas: "💾", unknown: "❓",
+  router: "RTR", switch: "SW", firewall: "FW", ap: "AP", server: "SRV",
+  printer: "PRN", camera: "CAM", iot: "IOT", nas: "NAS", unknown: "?",
 };
 
 export { TYPE_ICONS };
@@ -153,7 +153,7 @@ export default function AddDevice({ token, onClose, onAdded }) {
                     color: form.mode === m ? (m === "snmp" ? "#0984e3" : "#2ed573") : "#636e7b",
                     fontFamily: "monospace", fontWeight: 700, fontSize: 11,
                   }}>
-                  {m === "snmp" ? "📊 SNMP" : "🏓 PING ONLY"}
+                  {m === "snmp" ? "SNMP" : "PING ONLY"}
                   <div style={{ fontSize: 9, fontWeight: 400, marginTop: 2, opacity: 0.7 }}>
                     {m === "snmp" ? "CPU, RAM, interfaces" : "Online / Offline only"}
                   </div>
@@ -205,7 +205,7 @@ export default function AddDevice({ token, onClose, onAdded }) {
 
           {error && (
             <div style={{ background: "#ff475718", border: "1px solid #ff475733", borderRadius: 4, padding: "8px 12px", marginBottom: 12, color: "#ff4757", fontSize: 12 }}>
-              ⚠ {error}
+              {error}
             </div>
           )}
 
