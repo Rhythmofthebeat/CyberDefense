@@ -7,20 +7,20 @@ import AutonomousAgentPanel from "./AutonomousAgent.jsx";
 // ─── Constants ────────────────────────────────────────────────────────────────
 
 const THREAT_TYPES = [
-  { id: "malware",       label: "Malware",        icon: "🦠", color: "#ff4757" },
-  { id: "trojan",        label: "Trojan",          icon: "🐴", color: "#ff6b81" },
-  { id: "virus",         label: "Virus",           icon: "🧬", color: "#e84393" },
-  { id: "ransomware",    label: "Ransomware",      icon: "🔐", color: "#fd79a8" },
-  { id: "ddos",          label: "DDoS",            icon: "🌊", color: "#6c5ce7" },
-  { id: "phishing",      label: "Phishing",        icon: "🎣", color: "#a29bfe" },
-  { id: "side_channel",  label: "Side Channel",    icon: "📡", color: "#00b894" },
-  { id: "cache_attack",  label: "Cache Attack",    icon: "💾", color: "#00cec9" },
-  { id: "dram_attack",   label: "DRAM Attack",     icon: "🧮", color: "#0984e3" },
-  { id: "boot_threat",   label: "Boot Threat",     icon: "⚡", color: "#74b9ff" },
-  { id: "ip_threat",     label: "IP Threat",       icon: "🌐", color: "#fdcb6e" },
-  { id: "counterfeit",   label: "Counterfeit HW",  icon: "🔧", color: "#ffeaa7" },
-  { id: "covert_channel",label: "Covert Channel",  icon: "🕳️", color: "#fab1a0" },
-  { id: "apt",           label: "APT",             icon: "🎯", color: "#ff7675" },
+  { id: "malware",       label: "Malware",        icon: "MAL", color: "#ff4757" },
+  { id: "trojan",        label: "Trojan",          icon: "TRJ", color: "#ff6b81" },
+  { id: "virus",         label: "Virus",           icon: "VIR", color: "#e84393" },
+  { id: "ransomware",    label: "Ransomware",      icon: "RSM", color: "#fd79a8" },
+  { id: "ddos",          label: "DDoS",            icon: "DDS", color: "#6c5ce7" },
+  { id: "phishing",      label: "Phishing",        icon: "PHI", color: "#a29bfe" },
+  { id: "side_channel",  label: "Side Channel",    icon: "SC", color: "#00b894" },
+  { id: "cache_attack",  label: "Cache Attack",    icon: "CACHE", color: "#00cec9" },
+  { id: "dram_attack",   label: "DRAM Attack",     icon: "DRAM", color: "#0984e3" },
+  { id: "boot_threat",   label: "Boot Threat",     icon: "BOOT", color: "#74b9ff" },
+  { id: "ip_threat",     label: "IP Threat",       icon: "IP", color: "#fdcb6e" },
+  { id: "counterfeit",   label: "Counterfeit HW",  icon: "HW", color: "#ffeaa7" },
+  { id: "covert_channel",label: "Covert Channel",  icon: "COV", color: "#fab1a0" },
+  { id: "apt",           label: "APT",             icon: "APT", color: "#ff7675" },
 ];
 
 
@@ -165,12 +165,12 @@ function ThreatDetail({ threat, onAction }) {
     </div>
   );
   const actions = [
-    { label:"🛡️ Deploy Shield",     action:"shield",    color:"#0984e3" },
-    { label:"🔒 Isolate Zone",       action:"isolate",   color:"#ffa502" },
-    { label:"💥 Neutralize",         action:"neutralize",color:"#ff4757" },
-    { label:"🔍 Deep Scan",          action:"scan",      color:"#00b894" },
-    { label:"📋 Flag & Report",      action:"report",    color:"#a29bfe" },
-    { label:"🧬 Signature Extract",  action:"signature", color:"#fd79a8" },
+    { label:"Deploy Shield",     action:"shield",    color:"#0984e3" },
+    { label:"Isolate Zone",       action:"isolate",   color:"#ffa502" },
+    { label:"Neutralize",         action:"neutralize",color:"#ff4757" },
+    { label:"Deep Scan",          action:"scan",      color:"#00b894" },
+    { label:"Flag & Report",      action:"report",    color:"#a29bfe" },
+    { label:"Signature Extract",  action:"signature", color:"#fd79a8" },
   ];
   return (
     <div style={{ fontSize:12, color:"#8395a7" }}>
@@ -599,10 +599,10 @@ function CodeEditorPanel({ selectedThreat, token, addLog }) {
           {languages.map(l => <option key={l} value={l}>{l}</option>)}
         </select>
         <button onClick={generateScript} disabled={loading||deploying} title="AI generates a script for the selected threat" style={{ padding:"4px 10px", background:"#6c5ce71a", border:"1px solid #6c5ce744", borderRadius:4, color:"#6c5ce7", cursor:(loading||deploying)?"not-allowed":"pointer", fontSize:11, fontWeight:600 }}>
-          {loading?"…":"⚡ Generate"}
+          {loading?"…":"Generate"}
         </button>
         <button onClick={reviewCode} disabled={loading||deploying} title="AI reviews your code" style={{ padding:"4px 10px", background:"#00b8941a", border:"1px solid #00b89444", borderRadius:4, color:"#00b894", cursor:(loading||deploying)?"not-allowed":"pointer", fontSize:11, fontWeight:600 }}>
-          {loading?"…":"🔍 Review"}
+          {loading?"…":"Review"}
         </button>
         <button onClick={copyCode} style={{ marginLeft:"auto", padding:"4px 10px", background:"#0984e31a", border:"1px solid #0984e344", borderRadius:4, color:"#0984e3", cursor:"pointer", fontSize:11, fontWeight:600 }}>
           Copy
@@ -634,7 +634,7 @@ function CodeEditorPanel({ selectedThreat, token, addLog }) {
               cursor: canDeploy && !deploying ? "pointer" : "not-allowed",
             }}
           >
-            {deploying ? `${jobStatus || "pending"}…` : "🚀 Deploy & Run"}
+            {deploying ? `${jobStatus || "pending"}…` : "Deploy & Run"}
           </button>
           {jobStatus && (
             <span style={{ fontSize:9, color: jobColors[jobStatus] || "#636e7b", fontFamily:"'JetBrains Mono',monospace", fontWeight:700 }}>
@@ -730,7 +730,7 @@ function connectionToThreat(conn, device) {
 
   // Build origin label
   const countryFlag = geo?.countryCode
-    ? String.fromCodePoint(...[...geo.countryCode.toUpperCase()].map(c => 0x1F1E6 + c.charCodeAt(0) - 65))
+    ? null
     : null;
   const originLabel = geo
     ? `${countryFlag ? countryFlag + " " : ""}${geo.country}${geo.tor ? " [TOR]" : geo.proxy ? " [VPN]" : ""}`
@@ -910,10 +910,10 @@ function FullCodeEditor({ token, addLog }) {
         <div style={{ width: 1, height: 24, background: "#0f1d30" }}/>
 
         <button onClick={generateScript} disabled={loading || deploying} style={{ padding: "6px 14px", background: "#6c5ce71a", border: "1px solid #6c5ce744", borderRadius: 4, color: "#6c5ce7", cursor: (loading || deploying) ? "not-allowed" : "pointer", fontSize: 11, fontWeight: 700 }}>
-          {loading ? "…" : "⚡ Generate"}
+          {loading ? "…" : "Generate"}
         </button>
         <button onClick={reviewCode} disabled={loading || deploying} style={{ padding: "6px 14px", background: "#00b8941a", border: "1px solid #00b89444", borderRadius: 4, color: "#00b894", cursor: (loading || deploying) ? "not-allowed" : "pointer", fontSize: 11, fontWeight: 700 }}>
-          {loading ? "…" : "🔍 Review"}
+          {loading ? "…" : "Review"}
         </button>
         <button onClick={() => navigator.clipboard.writeText(code).then(() => addLog("Code copied", "#a29bfe"))} style={{ padding: "6px 14px", background: "#0984e31a", border: "1px solid #0984e344", borderRadius: 4, color: "#0984e3", cursor: "pointer", fontSize: 11, fontWeight: 700 }}>
           Copy
@@ -939,7 +939,7 @@ function FullCodeEditor({ token, addLog }) {
               cursor: canDeploy && !deploying ? "pointer" : "not-allowed",
             }}
           >
-            {deploying ? `${jobStatus || "pending"}…` : "🚀 Deploy & Run"}
+            {deploying ? `${jobStatus || "pending"}…` : "Deploy & Run"}
           </button>
         </div>
       </div>
@@ -1143,7 +1143,7 @@ export default function CyberDefenseCommand({ token, onLogout }) {
         {/* Header */}
         <div style={{ background:"linear-gradient(180deg,#0a1628,#060e1a)", borderBottom:`2px solid ${alertColors[alertLevel]}33`, padding:"12px 20px", display:"flex", alignItems:"center", justifyContent:"space-between", position:"sticky", top:0, zIndex:10 }}>
           <div style={{ display:"flex", alignItems:"center", gap:14 }}>
-            <div style={{ width:38, height:38, borderRadius:"50%", background:`radial-gradient(circle,${alertColors[alertLevel]}33,transparent)`, border:`2px solid ${alertColors[alertLevel]}66`, display:"flex", alignItems:"center", justifyContent:"center", fontSize:18, animation:alertLevel==="SEVERE"?"alertPulse 1s ease-in-out infinite":"none" }}>🛡️</div>
+            <div style={{ width:38, height:38, borderRadius:"50%", background:`radial-gradient(circle,${alertColors[alertLevel]}33,transparent)`, border:`2px solid ${alertColors[alertLevel]}66`, display:"flex", alignItems:"center", justifyContent:"center", fontSize:18, animation:alertLevel==="SEVERE"?"alertPulse 1s ease-in-out infinite":"none" }}></div>
             <div>
               <div style={{ fontFamily:"'Orbitron',monospace", fontSize:15, fontWeight:900, letterSpacing:3, color:"#ecf0f1" }}>CYBER DEFENSE COMMAND</div>
               <div style={{ fontSize:10, color:"#4a5568", letterSpacing:1 }}>GOVERNMENT AI-POWERED THREAT OPERATIONS CENTER</div>
@@ -1171,7 +1171,7 @@ export default function CyberDefenseCommand({ token, onLogout }) {
             <div style={{ width:1, height:30, background:"#0f1d30" }}/>
             {/* Main nav tabs */}
             <div style={{ display:"flex", background:"#060e1a", border:"1px solid #0f1d30", borderRadius:4, overflow:"hidden" }}>
-              {[["dashboard","🖥 Dashboard"],["fleet","🖧 Fleet"],["autonomous","🤖 Auto Agent"],["mdm","📱 MDM"],["editor","⌨️ Code"]].map(([id, label]) => (
+              {[["dashboard","Dashboard"],["fleet","Fleet"],["autonomous","Auto Agent"],["mdm","MDM"],["editor","Code"]].map(([id, label]) => (
                 <button key={id} onClick={() => setMainTab(id)} style={{ padding:"6px 14px", background: mainTab===id ? "#0984e322" : "transparent", border:"none", borderRight:"1px solid #0f1d30", color: mainTab===id ? "#0984e3" : "#4a5568", cursor:"pointer", fontSize:11, fontWeight:700, fontFamily:"'JetBrains Mono',monospace", letterSpacing:0.5, whiteSpace:"nowrap" }}>
                   {label}
                 </button>
@@ -1196,15 +1196,15 @@ export default function CyberDefenseCommand({ token, onLogout }) {
 
         {/* Stat Cards */}
         <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(155px,1fr))", gap:10, padding:"12px 20px" }}>
-          <StatCard label="Active Threats"  value={activeThreats} sub={`${activeCrit} critical`} color="#ff4757"  icon="⚠️"/>
-          <StatCard label="Mitigating"      value={mitigating}                                    color="#ffa502"  icon="🔄"/>
-          <StatCard label="Neutralized"     value={neutralized}   sub="session total"             color="#2ed573"  icon="✅"/>
-          <StatCard label="Connections Scanned" value={defense.aiScans.toLocaleString()} sub="real network traffic" color="#0984e3" icon="🤖"/>
-          <StatCard label="Monitored Devices" value={`${defense.firewalls.active}/${defense.firewalls.total}`} sub="online / total" color="#6c5ce7" icon="💻"/>
-          <StatCard label="System Uptime"   value={`${defense.uptime}%`} sub={defense.encryption.strength} color="#00b894" icon="🔒"/>
-          <StatCard label="High-Risk Geo"   value={summary.highRiskGeoConnections || 0} sub="flagged countries" color="#ff6348" icon="🌍"/>
-          <StatCard label="TOR / Proxy"     value={(summary.torConnections || 0) + (summary.proxyConnections || 0)} sub="anonymized connections" color="#e84393" icon="🧅"/>
-          <StatCard label="Beaconing"       value={summary.beaconingDevices || 0} sub="C2 pattern detected" color="#a29bfe" icon="📡"/>
+          <StatCard label="Active Threats"  value={activeThreats} sub={`${activeCrit} critical`} color="#ff4757"  icon="ALERT"/>
+          <StatCard label="Mitigating"      value={mitigating}                                    color="#ffa502"  icon="SYNC"/>
+          <StatCard label="Neutralized"     value={neutralized}   sub="session total"             color="#2ed573"  icon="OK"/>
+          <StatCard label="Connections Scanned" value={defense.aiScans.toLocaleString()} sub="real network traffic" color="#0984e3" icon="BOT"/>
+          <StatCard label="Monitored Devices" value={`${defense.firewalls.active}/${defense.firewalls.total}`} sub="online / total" color="#6c5ce7" icon="PC"/>
+          <StatCard label="System Uptime"   value={`${defense.uptime}%`} sub={defense.encryption.strength} color="#00b894" icon="SEC"/>
+          <StatCard label="High-Risk Geo"   value={summary.highRiskGeoConnections || 0} sub="flagged countries" color="#ff6348" icon="GEO"/>
+          <StatCard label="TOR / Proxy"     value={(summary.torConnections || 0) + (summary.proxyConnections || 0)} sub="anonymized connections" color="#e84393" icon="TOR"/>
+          <StatCard label="Beaconing"       value={summary.beaconingDevices || 0} sub="C2 pattern detected" color="#a29bfe" icon="SIG"/>
         </div>
 
         {/* Main Grid */}
@@ -1219,7 +1219,7 @@ export default function CyberDefenseCommand({ token, onLogout }) {
               ? <ThreatFeed threats={threats} onSelect={setSelected} selected={selected}/>
               : (
                 <div style={{ display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", height:200, gap:8, textAlign:"center" }}>
-                  <div style={{ fontSize:28, opacity:0.3 }}>📡</div>
+                  <div style={{ fontSize:28, opacity:0.3 }}></div>
                   <div style={{ fontSize:11, color:"#ff4757", fontFamily:"'JetBrains Mono',monospace", fontWeight:700 }}>NOT CONNECTED</div>
                   <div style={{ fontSize:10, color:"#2a3a4e", maxWidth:200 }}>Live device monitoring isn't available in this public demo</div>
                 </div>
@@ -1285,8 +1285,8 @@ export default function CyberDefenseCommand({ token, onLogout }) {
         <div style={{ width:440, borderLeft:"1px solid #0f1d30", background:"#060e1a", display:"flex", flexDirection:"column", flexShrink:0 }}>
           {/* Tab bar */}
           <div style={{ display:"flex", borderBottom:"1px solid #0f1d30", flexShrink:0 }}>
-            {tabBtn("chat",   "🤖 AI Chat")}
-            {tabBtn("editor", "⌨️  Code Editor")}
+            {tabBtn("chat",   "AI Chat")}
+            {tabBtn("editor", "Code Editor")}
             <button onClick={() => setPanelOpen(false)} title="Close panel"
               style={{ padding:"8px 12px", background:"transparent", border:"none", borderBottom:"2px solid transparent", color:"#4a5568", cursor:"pointer", fontSize:14, flexShrink:0 }}>
               ✕
